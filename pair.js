@@ -58,7 +58,7 @@ router.get('/', async (req, res) => {
 
                let ORMAN_X_TEXT = `
 *BLACK TECH INC*
-*you have used QR method*
+*you have used pair code method*
 > YOU HAVE SUCCESSFULLY COMPLETED YOUR FIRST STEP
 > NOW COPY THE SESSION CODE ABOVE AND USE IT IN YOUR PREFERED DEPLOYING SITE
 ____________________________________
@@ -70,7 +70,7 @@ ____________________________________
 ╚════════════════════❒
 ╔═════◇
 ║ 『••• OWNER INFO •••』
-║ ❒ 𝐘𝐨𝐮𝐭𝐮𝐛𝐞: _https://www.youtube.com/@blacktech87_
+║ ❒ 𝐘𝐨𝐮𝐭𝐮𝐛𝐞: _https://www.youtube.com/@blackTech-87_
 
 ║ ❒ 𝐎𝐰𝐧𝐞𝐫: _https://wa.me/256704291969_
 
