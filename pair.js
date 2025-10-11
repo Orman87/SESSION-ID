@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
                 },
                 printQRInTerminal: false,
                 logger: pino({level: "fatal"}).child({level: "fatal"}),
-                browser: ["Chrome (Linux)", "silva", "Mac OS"]
+                browser: ["Chrome (Linux)", "orman", "Mac OS"]
              });
              if(!Pair_Code_By_ORMAN_X_TERRI.authState.creds.registered) {
                 await delay(1500);
@@ -54,10 +54,9 @@ router.get('/', async (req, res) => {
                 let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
                 await delay(800);
                let b64data = Buffer.from(data).toString('base64');
-               let session = await Pair_Code_By_ORMAN_X_TERRI.sendMessage(Pair_Code_By_ORMAN_X_TERRI.user.id, { text: 'Silva~' + b64data });
+               let session = await Pair_Code_By_ORMAN_X_TERRI.sendMessage(Pair_Code_By_ORMAN_X_TERRI.user.id, { text: 'Ormanxmd~' + b64data });
 
                let ORMAN_X_TEXT = `
-`
 *BLACK TECH INC*
 *you have used QR method*
 > YOU HAVE SUCCESSFULLY COMPLETED YOUR FIRST STEP
