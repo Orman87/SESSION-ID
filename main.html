@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ORMAN XMD – WhatsApp Bot</title>
-  <link rel="icon" type="image/png" href="https://telegra.ph/file/016e29eeceab76949bdc3.jpg">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="https://telegra.ph/file/016e29eeceab76949bdc3.jpg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ===== Root Theme Variables ===== */
@@ -15,21 +15,21 @@
       --accent: #1e90ff;
       --dark: #070b14;
       --light: #e5f6ff;
-      --glass-bg: rgba(255,255,255,0.08);
-      --glass-border: rgba(255,255,255,0.15);
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.15);
       --transition: all 0.35s ease;
-      --glow: 0 0 15px rgba(30,144,255,0.4);
+      --glow: 0 0 15px rgba(30, 144, 255, 0.4);
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+      font-family: "Poppins", sans-serif;
       transition: var(--transition);
     }
 
-    /* ===== Background Animated Gradient ===== */
+    /* ===== Background Image + Gradient Overlay ===== */
     body {
       background: linear-gradient(-45deg, #0a0f1a, #001f3f, #1e3a8a, #0a0f1a);
       background-size: 400% 400%;
@@ -37,37 +37,57 @@
       color: var(--light);
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Image Layer */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("https://files.catbox.moe/3xfxhw.jpg") no-repeat center center / cover;
+      opacity: 0.25;
+      z-index: -2;
+      animation: fadeIn 2s ease forwards;
+      filter: blur(2px);
+    }
+
+    /* Gradient Animation Overlay */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(-45deg, rgba(10, 15, 26, 0.7), rgba(0, 31, 63, 0.6), rgba(30, 58, 138, 0.5));
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 0.25;
+      }
     }
 
     @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     /* Blue edge strips */
-    body::before, body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      background: linear-gradient(180deg, #00bfff, #1e90ff, #00bfff);
-      animation: edgeGlow 3s linear infinite;
-      z-index: 999;
-    }
-    body::before { left: 0; }
-    body::after { right: 0; }
-
-    @keyframes edgeGlow {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
+    body::before,
+    body::after {
+      transition: opacity 1s ease;
     }
 
     /* ===== Navbar ===== */
@@ -76,7 +96,7 @@
       top: 0;
       width: 100%;
       padding: 1.2rem 2rem;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(15px);
       border-bottom: 1px solid var(--glass-border);
       z-index: 1000;
@@ -116,7 +136,7 @@
     }
 
     .nav-links a::after {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       bottom: -5px;
@@ -145,11 +165,11 @@
       -webkit-background-clip: text;
       color: transparent;
       margin-bottom: 1.2rem;
-      text-shadow: 0 0 10px rgba(30,144,255,0.3);
+      text-shadow: 0 0 10px rgba(30, 144, 255, 0.3);
     }
 
     .hero p {
-      color: rgba(255,255,255,0.75);
+      color: rgba(255, 255, 255, 0.8);
       max-width: 700px;
       margin: 0 auto;
       font-size: 1.1rem;
@@ -172,21 +192,23 @@
     }
 
     .btn::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: -100%;
       width: 100%;
       height: 100%;
-      background: rgba(255,255,255,0.3);
+      background: rgba(255, 255, 255, 0.3);
       transition: var(--transition);
     }
 
-    .btn:hover::before { left: 0; }
+    .btn:hover::before {
+      left: 0;
+    }
 
     .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 0 25px rgba(30,144,255,0.5);
+      box-shadow: 0 0 25px rgba(30, 144, 255, 0.5);
     }
 
     .btn-outline {
@@ -201,24 +223,28 @@
       box-shadow: var(--glow);
     }
 
-    /* ===== Stats ===== */
-    .stats {
+    /* ===== Cards (Stats, Features, About) ===== */
+    .stats,
+    .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 25px;
       margin: 80px 0;
     }
 
-    .stat-card {
+    .stat-card,
+    .feature-card {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 15px;
       padding: 40px 20px;
       text-align: center;
       backdrop-filter: blur(16px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .stat-card:hover {
+    .stat-card:hover,
+    .feature-card:hover {
       transform: translateY(-6px);
       box-shadow: var(--glow);
     }
@@ -234,44 +260,11 @@
       font-size: 1rem;
     }
 
-    /* ===== Features ===== */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 35px;
-      margin: 80px 0;
-    }
-
-    .feature-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 15px;
-      padding: 50px 30px;
-      text-align: center;
-      backdrop-filter: blur(16px);
-    }
-
-    .feature-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--glow);
-    }
-
     .feature-icon {
       font-size: 3rem;
       color: var(--accent);
       margin-bottom: 20px;
-      filter: drop-shadow(0 0 10px rgba(30,144,255,0.6));
-    }
-
-    .feature-card h3 {
-      margin-bottom: 12px;
-      color: var(--light);
-    }
-
-    .feature-card p {
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 20px;
-      line-height: 1.5;
+      filter: drop-shadow(0 0 10px rgba(30, 144, 255, 0.6));
     }
 
     /* ===== About ===== */
@@ -295,13 +288,13 @@
     .about p {
       max-width: 800px;
       margin: 0 auto;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255, 255, 255, 0.7);
       line-height: 1.6;
     }
 
     /* ===== Footer ===== */
     footer {
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(15px);
       border-top: 3px solid var(--accent);
       padding: 3rem 1rem;
@@ -322,13 +315,8 @@
       color: var(--accent);
     }
 
-    .footer-links h3 {
-      margin-bottom: 15px;
-      color: var(--light);
-    }
-
     .footer-links a {
-      color: rgba(255,255,255,0.7);
+      color: rgba(255, 255, 255, 0.7);
       text-decoration: none;
     }
 
@@ -336,22 +324,16 @@
       color: var(--accent);
     }
 
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 15px;
-    }
-
     .social-links a {
       width: 42px;
       height: 42px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       color: var(--light);
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: var(--transition);
     }
 
     .social-links a:hover {
@@ -362,17 +344,23 @@
 
     .copyright {
       margin-top: 40px;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255, 255, 255, 0.6);
       font-size: 0.9rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
       padding-top: 20px;
     }
 
-    /* ===== Responsive ===== */
     @media (max-width: 768px) {
-      .navbar-container { flex-direction: column; gap: 15px; }
-      .hero h1 { font-size: 2.4rem; }
-      .features { grid-template-columns: 1fr; }
+      .navbar-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+      .features {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -392,14 +380,12 @@
   </header>
 
   <main class="container">
-    <!-- Hero -->
     <section class="hero">
       <h1>WhatsApp Bot Solutions</h1>
       <p>Advanced session management for WhatsApp bots. Get QR codes, pair codes, and deployment tools — all in one place.</p>
       <a href="/qr" class="btn">Get Started</a>
     </section>
 
-    <!-- Stats -->
     <section id="stats" class="stats">
       <div class="stat-card"><div class="stat-number" id="github-stars">0</div><div class="stat-label">GitHub Stars</div></div>
       <div class="stat-card"><div class="stat-number" id="github-forks">0</div><div class="stat-label">Forks</div></div>
@@ -407,7 +393,6 @@
       <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Support</div></div>
     </section>
 
-    <!-- Features -->
     <section id="features" class="features">
       <div class="feature-card">
         <div class="feature-icon"><i class="fas fa-qrcode"></i></div>
@@ -429,14 +414,12 @@
       </div>
     </section>
 
-    <!-- About -->
     <section id="about" class="about">
       <h2>About Orman XMD</h2>
       <p>We specialize in advanced WhatsApp bot solutions that are powerful yet easy to use. Automate your communication efficiently with fast setup, session management, and 24/7 support.</p>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer id="contact">
     <div class="footer-grid">
       <div>
@@ -467,24 +450,26 @@
         </ul>
       </div>
     </div>
-    <div class="copyright">© <span id="currentYear"></span> ORMAN XMD | Created by KING ORMAN</div>
+    <div class="copyright">
+      © <span id="currentYear"></span> ORMAN XMD | Created by KING ORMAN
+    </div>
   </footer>
 
   <script>
-    // GitHub stats animation
     async function fetchGitHubStats() {
       try {
-        const res = await fetch('https://api.github.com/repos/Orman87/ORMAN_XMD');
+        const res = await fetch("https://api.github.com/repos/Orman87/ORMAN_XMD");
         const data = await res.json();
-        animateValue('github-stars', 0, data.stargazers_count, 1000);
-        animateValue('github-forks', 0, data.forks_count, 1000);
-        animateValue('github-watchers', 0, data.watchers_count, 1000);
+        animateValue("github-stars", 0, data.stargazers_count, 1000);
+        animateValue("github-forks", 0, data.forks_count, 1000);
+        animateValue("github-watchers", 0, data.watchers_count, 1000);
       } catch {
-        document.getElementById('github-stars').textContent = '250+';
-        document.getElementById('github-forks').textContent = '100+';
-        document.getElementById('github-watchers').textContent = '50+';
+        document.getElementById("github-stars").textContent = "250+";
+        document.getElementById("github-forks").textContent = "100+";
+        document.getElementById("github-watchers").textContent = "50+";
       }
     }
+
     function animateValue(id, start, end, duration) {
       const obj = document.getElementById(id);
       let startTimestamp = null;
@@ -496,10 +481,11 @@
       };
       requestAnimationFrame(step);
     }
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("currentYear").textContent = new Date().getFullYear();
       fetchGitHubStats();
     });
   </script>
 </body>
-</html
+  </html>
