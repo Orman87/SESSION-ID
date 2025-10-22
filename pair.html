@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, device-width, initial-scale=1.0">
+  <title>ORMAN PAIRING DASHBOARD</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: linear-gradient(135deg, #00f5ff, #0066ff);
+      --secondary: #00f5ff;
+      --accent: #ff2a6d;
+      --bg: #0a0e23;
+      --glass: rgba(16, 22, 58, 0.7);
+      --text: #ffffff;
+      --muted: #8a9bb8;
+      --highlight: #00f5ff;
+      --radius: 12px;
+      --blur: 15px;
+      --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --glow: 0 0 15px rgba(0, 245, 255, 0.5);
+      --inner-glow: inset 0 0 10px rgba(0, 245, 255, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'SF Pro Display', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+      color: var(--text);
+      padding: 80px 20px 120px;
+      background: var(--bg);
+    }
+
+    /* Tech Background with animated grid */
+    .tech-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(0, 245, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0e23 0%, #151a35 100%);
+    }
+
+    .grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 245, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 255, 0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+      z-index: -2;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(30px, 30px); }
+    }
+
+    /* Header with logo */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(10, 14, 35, 0.8);
+      backdrop-filter: blur(var(--blur));
+      z-index: 100;
+      border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: 40px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 2px solid var(--secondary);
+      box-shadow: var(--glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-img::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(0, 245, 255, 0.4), transparent);
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: var(--glow);
+      letter-spacing: 1px;
+    }
+
+    /* Battery indicator */
+    .battery-container {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.9rem;
+      border: 1px solid rgba(0, 245, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .battery-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: var(--battery-level, 85%);
+      background: linear-gradient(90deg, var(--secondary), #0066ff);
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    .battery-icon {
+      color: var(--secondary);
+      font-size: 1.2rem;
+    }
+
+    /* Main container */
+    .main-content {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Pairing box */
+    .box {
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur));
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 
+        0 10px 35px rgba(0, 0, 0, 0.4),
+        var(--inner-glow);
+      border: 1px solid rgba(0, 245, 255, 0.2);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .box:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.5), 
+        var(--glow),
+        var(--inner-glow);
+    }
+
+    .box h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: var(--glow);
+    }
+
+    .box h5 {
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+
+    /* Input styling */
+    .input-container {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(0, 245, 255, 0.2);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .input-container input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(0, 245, 255, 0.2);
+    }
+
+    .input-container button {
+      padding: 1rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .input-container button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .input-container button:hover::before {
+      left: 100%;
+    }
+
+    .input-container button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 245, 255, 0.3);
+    }
+
+    /* Result display */
+    #pair-result {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: var(--radius);
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 245, 255, 0.2);
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #pair-result::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent, rgba(0, 245, 255, 0.05), transparent);
+      animation: scan 3s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    #copy-code {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--secondary);
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      margin-top: 1rem;
+      display: none;
+    }
+
+    #copy-code:hover {
+      background: rgba(0, 245, 255, 0.1);
+      box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
+    }
+
+    /* Enhanced Music Player */
+    .music-player {
+      width: 100%;
+      max-width: 500px;
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur));
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        var(--inner-glow);
+      border: 1px solid rgba(0, 245, 255, 0.2);
+      z-index: 90;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .music-player::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .player-title {
+      font-size: 1.2rem;
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .player-status {
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 245, 255, 0.2);
+    }
+
+    .track-info {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .track-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .track-artist {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .control-btn {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 245, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--secondary);
+    }
+
+    .control-btn:hover {
+      background: rgba(0, 245, 255, 0.1);
+      box-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+    }
+
+    .play-btn {
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      color: white;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(0, 245, 255, 0.5);
+    }
+
+    .progress-container {
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary), #0066ff);
+      width: 30%;
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background: var(--secondary);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--secondary);
+    }
+
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .visualizer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 3px;
+      height: 40px;
+      margin-top: 1rem;
+    }
+
+    .bar {
+      width: 4px;
+      background: var(--secondary);
+      border-radius: 2px;
+      transition: height 0.3s ease;
+      box-shadow: 0 0 5px var(--secondary);
+    }
+
+    /* Tech Elements Below Music Player */
+    .tech-dashboard {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .tech-card {
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur));
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid rgba(0, 245, 255, 0.2);
+      box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.3),
+        var(--inner-glow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tech-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .tech-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.4),
+        0 0 10px rgba(0, 245, 255, 0.2);
+    }
+
+    .card-title {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--secondary);
+      text-shadow: 0 0 5px rgba(0, 245, 255, 0.5);
+    }
+
+    .card-unit {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-left: 0.3rem;
+    }
+
+    .system-monitor {
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur));
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid rgba(0, 245, 255, 0.2);
+      box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.3),
+        var(--inner-glow);
+    }
+
+    .monitor-title {
+      font-size: 1rem;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .terminal {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: var(--secondary);
+      height: 120px;
+      overflow-y: auto;
+      border: 1px solid rgba(0, 245, 255, 0.2);
+    }
+
+    .terminal-line {
+      margin-bottom: 0.3rem;
+    }
+
+    .terminal-prompt {
+      color: #00ff9d;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .header {
+        padding: 0.8rem 1rem;
+      }
+
+      .logo-text {
+        font-size: 1.2rem;
+      }
+
+      body {
+        padding: 70px 15px 100px;
+      }
+
+      .input-container {
+        flex-direction: column;
+      }
+
+      .input-container button {
+        width: 100%;
+      }
+
+      .music-player {
+        padding: 1rem;
+      }
+
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Tech Background -->
+  <div class="tech-background"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Header with Logo -->
+  <header class="header">
+    <div class="logo-container">
+      <img src="https://files.catbox.moe/3xfxhw.jpg" alt="Orman bot Logo" class="logo-img">
+      <div class="logo-text">ORMAN_XMD</div>
+    </div>
+
+    <!-- Battery Indicator -->
+    <div class="battery-container">
+      <i class="fas fa-battery-full battery-icon" id="battery-icon"></i>
+      <span id="battery-level">--%</span>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <div class="main-content">
+    <!-- Pairing box -->
+    <div class="box">
+      <h2>PAIRING CODE</h2>
+      <h5>SECURE CONNECTION PROTOCOL</h5>
+      <p>Please enter your number with country code e.g 2567042xxxxx</p>
+
+      <div class="input-container">
+        <input type="tel" id="number" placeholder="Enter your WhatsApp number with country code (e.g., +1234567890)" required>
+        <button id="submit">REQUEST CODE</button>
+      </div>
+
+      <div id="pair-result">
+        <p id="waiting-message" style="display: none;">Please wait...</p>
+      </div>
+
+      <button id="copy-code" onclick="copyCode()">COPY YOUR CODE</button>
+    </div>
+
+    <!-- Enhanced Music Player -->
+    <div class="music-player">
+      <div class="player-header">
+        <div class="player-title">NEURAL INTERFACE</div>
+        <div class="player-status" id="player-status">ACTIVE</div>
+      </div>
+
+      <div class="track-info">
+        <div class="track-name">QUANTUM FREQUENCY</div>
+        <div class="track-artist">by ORMAN SYSTEMS</div>
+      </div>
+
+      <div class="player-controls">
+        <button class="control-btn" onclick="skipBack()">
+          <i class="fas fa-step-backward"></i>
+        </button>
+        <button class="control-btn play-btn" onclick="togglePlay()">
+          <i class="fas fa-pause" id="play-icon"></i>
+        </button>
+        <button class="control-btn" onclick="skipForward()">
+          <i class="fas fa-step-forward"></i>
+        </button>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="time-display">
+          <span id="current-time">0:00</span>
+          <span id="total-time">0:00</span>
+        </div>
+      </div>
+
+      <div class="visualizer" id="visualizer"></div>
+      
+      <audio id="audio1" src="https://files.catbox.moe/o3at3k.m4a" loop></audio>
+    </div>
+
+    <!-- Tech Dashboard Below Music Player -->
+    <div class="tech-dashboard">
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="card-title">CPU USAGE</div>
+          <div class="card-value">24<span class="card-unit">%</span></div>
+        </div>
+        <div class="tech-card">
+          <div class="card-title">MEMORY</div>
+          <div class="card-value">1.2<span class="card-unit">GB</span></div>
+        </div>
+        <div class="tech-card">
+          <div class="card-title">NETWORK</div>
+          <div class="card-value">87<span class="card-unit">Mbps</span></div>
+        </div>
+        <div class="tech-card">
+          <div class="card-title">LATENCY</div>
+          <div class="card-value">32<span class="card-unit">ms</span></div>
+        </div>
+      </div>
+
+      <div class="system-monitor">
+        <div class="monitor-title">SYSTEM MONITOR</div>
+        <div class="terminal" id="terminal">
+          <div class="terminal-line"><span class="terminal-prompt">system@orman:~$</span> Initializing systems...</div>
+          <div class="terminal-line"><span class="terminal-prompt">system@orman:~$</span> Pairing protocol: ACTIVE</div>
+          <div class="terminal-line"><span class="terminal-prompt">system@orman:~$</span> Encryption: AES-256</div>
+          <div class="terminal-line"><span class="terminal-prompt">system@orman:~$</span> Connection: SECURE</div>
+          <div class="terminal-line"><span class="terminal-prompt">system@orman:~$</span> Audio interface: ONLINE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+  <script>
+    // DOM elements
+    const pairResult = document.getElementById("pair-result");
+    const submitBtn = document.getElementById("submit");
+    const numberInput = document.getElementById("number");
+    const copyCodeBtn = document.getElementById("copy-code");
+    const waitingMessage = document.getElementById("waiting-message");
+    const batteryLevel = document.getElementById("battery-level");
+    const batteryIcon = document.getElementById("battery-icon");
+
+    // Enhanced Music Player Elements
+    const audio = document.getElementById('audio1');
+    const playIcon = document.getElementById('play-icon');
+    const currentTime = document.getElementById('current-time');
+    const totalTime = document.getElementById('total-time');
+    const progressFill = document.getElementById('progress-fill');
+    const progressBar = document.getElementById('progress-bar');
+    const visualizer = document.getElementById('visualizer');
+    const playerStatus = document.getElementById('player-status');
+    const terminal = document.getElementById('terminal');
+
+    // Copy code function
+    async function copyCode() {
+      const code = pairResult.innerText.replace('CODE: ', '');
+      try {
+        await navigator.clipboard.writeText(code);
+        copyCodeBtn.innerText = "COPIED!";
+        copyCodeBtn.style.backgroundColor = "var(--secondary)";
+        copyCodeBtn.style.color = "#000";
+        setTimeout(() => {
+          copyCodeBtn.innerText = "COPY CODE";
+          copyCodeBtn.style.backgroundColor = "";
+          copyCodeBtn.style.color = "";
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
+    }
+
+    // Submit handler
+    submitBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      if (!numberInput.value) {
+        pairResult.innerHTML = '<p style="color:var(--highlight)">Enter your WhatsApp number without Country Code</p>';
+        return;
+      }
+
+      const cleanNumber = numberInput.value.replace(/[^0-9]/g, "");
+
+      if (cleanNumber.length < 11) {
+        pairResult.innerHTML = '<p style="color:#ff5555">Invalid Number</p>';
+        return;
+      }
+
+      // Format number display
+      let formattedNumber = "";
+      const digits = cleanNumber.split('');
+      digits.forEach((digit, index) => {
+        formattedNumber += digit;
+        if (index === 2 || index === 7) {
+          formattedNumber += " ";
+        }
+      });
+
+      numberInput.type = "text";
+      numberInput.value = "+" + formattedNumber;
+      numberInput.style.color = "var(--highlight)";
+
+      waitingMessage.style.display = "block";
+      pairResult.innerHTML = "";
+      copyCodeBtn.style.display = "none";
+
+      try {
+        const { data } = await axios(`/code?number=${cleanNumber}`);
+        const code = data.code || "Service Unavailable";
+
+        pairResult.innerHTML = `
+          <p style="color:var(--highlight); font-weight:bold; font-size:1.2rem;">
+            CODE: <span style="color:white">${code}</span>
+          </p>
+        `;
+        copyCodeBtn.style.display = "inline-block";
+        waitingMessage.style.display = "none";
+      } catch (error) {
+        pairResult.innerHTML = '<p style="color:#ff5555">Error getting pairing code</p>';
+        waitingMessage.style.display = "none";
+      }
+    });
+
+    // Enhanced Music Player Functions
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playIcon.className = 'fas fa-pause';
+        playerStatus.textContent = 'PLAYING';
+        playerStatus.style.color = '#00ff9d';
+      } else {
+        audio.pause();
+        playIcon.className = 'fas fa-play';
+        playerStatus.textContent = 'PAUSED';
+        playerStatus.style.color = 'var(--muted)';
+      }
+    }
+
+    function skipForward() {
+      audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+    }
+
+    function skipBack() {
+      audio.currentTime = Math.max(0, audio.currentTime - 10);
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Progress bar interaction
+    progressBar.addEventListener('click', (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = percent * audio.duration;
+    });
+
+    // Audio event listeners
+    audio.addEventListener('loadedmetadata', () => {
+      totalTime.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      currentTime.textContent = formatTime(audio.currentTime);
+      const progress = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = `${progress}%`;
+    });
+
+    // Visualizer
+    function createVisualizer() {
+      visualizer.innerHTML = '';
+      for (let i = 0; i < 20; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = `${Math.random() * 30 + 10}px`;
+        visualizer.appendChild(bar);
+      }
+    }
+
+    function updateVisualizer() {
+      const bars = visualizer.querySelectorAll('.bar');
+      bars.forEach(bar => {
+        const newHeight = Math.random() * 30 + 10;
+        bar.style.height = `${newHeight}px`;
+        bar.style.opacity = Math.random() * 0.5 + 0.5;
+      });
+    }
+
+    // Auto-play music when page loads (with user interaction)
+    document.addEventListener('click', function initAudio() {
+      audio.play().then(() => {
+        playIcon.className = 'fas fa-pause';
+        playerStatus.textContent = 'PLAYING';
+        playerStatus.style.color = '#00ff9d';
+        createVisualizer();
+        setInterval(updateVisualizer, 200);
+      }).catch(error => {
+        console.log('Auto-play prevented:', error);
+      });
+      document.removeEventListener('click', initAudio);
+    }, { once: true });
+
+    // Battery status indicator
+    async function updateBattery() {
+      if (navigator.getBattery) {
+        try {
+          const battery = await navigator.getBattery();
+
+          const updateBatteryUI = () => {
+            const batteryPercent = Math.round(battery.level * 100);
+            batteryLevel.textContent = `${batteryPercent}%`;
+            document.documentElement.style.setProperty('--battery-level', `${batteryPercent}%`);
+
+            // Update battery icon based on level
+            let iconClass = 'fa-battery-empty';
+            if (batteryPercent > 80) iconClass = 'fa-battery-full';
+            else if (batteryPercent > 60) iconClass = 'fa-battery-three-quarters';
+            else if (batteryPercent > 40) iconClass = 'fa-battery-half';
+            else if (batteryPercent > 20) iconClass = 'fa-battery-quarter';
+
+            // Add charging bolt if charging
+            if (battery.charging) {
+              batteryIcon.className = `fas fa-bolt ${iconClass}`;
+              batteryIcon.style.color = '#00ff9d';
+            } else {
+              batteryIcon.className = `fas ${iconClass}`;
+              batteryIcon.style.color = 'var(--highlight)';
+            }
+          };
+
+          battery.addEventListener('levelchange', updateBatteryUI);
+          battery.addEventListener('chargingchange', updateBatteryUI);
+          updateBatteryUI();
+        } catch (error) {
+          console.error('Battery API error:', error);
+        }
+      } else {
+        batteryLevel.textContent = "N/A";
+      }
+    }
+
+    // Initialize
+    window.addEventListener('load', () => {
+      copyCodeBtn.style.display = "none";
+      updateBattery();
+
+      // Smooth page load
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.style.transition = 'opacity 0.5s ease';
+        document.body.style.opacity = '1';
+      }, 100);
+
+      // Create visualizer bars
+      createVisualizer();
+    });
+
+    // Terminal animation
+    function addTerminalLine(text) {
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+      line.innerHTML = `<span class="terminal-prompt">system@orman:~$</span> ${text}`;
+      terminal.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    // Simulate system activity
+    setTimeout(() => {
+      addTerminalLine('Quantum pairing initialized');
+    }, 3000);
+
+    setTimeout(() => {
+      addTerminalLine('Audio compression: 92%');
+    }, 6000);
+
+    // Update tech cards with random values
+    function updateTechCards() {
+      const cards = document.querySelectorAll('.tech-card');
+      cards.forEach(card => {
+        const valueElement = card.querySelector('.card-value');
+        const currentValue = parseInt(valueElement.textContent);
+        const newValue = Math.max(1, Math.min(99, currentValue + Math.floor(Math.random() * 10) - 5));
+        valueElement.innerHTML = `${newValue}<span class="card-unit">${valueElement.querySelector('.card-unit').textContent}</span>`;
+      });
+    }
+
+    setInterval(updateTechCards, 5000);
+  </script>
+</body>
+</html>
