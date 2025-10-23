@@ -55,7 +55,6 @@ router.get('/', async (req, res) => {
                     let session = await Pair_Code_By_Horlapookie.sendMessage(Pair_Code_By_Horlapookie.user.id, { text: 'Ormanxmd~' + b64data });
 
                     let Star_MD_TEXT = `
-
 ╭─═━⌬━═─⊹⊱✦⊰⊹─═━⌬━═─ 
 ╎   『 𝐒𝐄𝐒𝐒𝐈𝐎𝐍 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 』   
 ╎  ✦ 𝙾𝚁𝙼𝙰𝙽_𝚇𝙼𝙳 sᴇssɪᴏɴ
