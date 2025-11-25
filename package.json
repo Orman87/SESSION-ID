@@ -11,7 +11,7 @@
   "author": "Orman the King",
   "license": "GPL-3.0 license",
   "dependencies": {
-    "@whiskeysockets/baileys": "npm:@rexxhayanasi/elaina-baileys",
+    "@whiskeysockets/baileys": "npm:Clint-Baileys",
     "qrcode": "^1.5.3",
     "awesome-phonenumber": "^2.64.0",
     "pino": "^8.1.0",
