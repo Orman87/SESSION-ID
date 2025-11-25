@@ -11,7 +11,7 @@
   "author": "Orman the King",
   "license": "GPL-3.0 license",
   "dependencies": {
-    "@whiskeysockets/baileys": "npm:Clint-Baileys",
+    "@whiskeysockets/baileys": "https://github.com/Dark-Xploit/Baileys/archive/refs/tags/v2.0.5.tar.gz",
     "qrcode": "^1.5.3",
     "awesome-phonenumber": "^2.64.0",
     "pino": "^8.1.0",
