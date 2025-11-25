@@ -12,7 +12,7 @@
   "license": "GPL-3.0 license",
   "dependencies": {
   "@whiskeysockets/baileys": "npm:@rexxhayanasi/elaina-baileys",
-   "@whiskeysockets/baileys": "github:XdKing2/Malvin-Baileys",
+"@whiskeysockets/baileys": "github:XdKing2/Malvin-Baileys",
     "qrcode": "^1.5.3",
     "awesome-phonenumber": "^2.64.0",
     "pino": "^8.1.0",
