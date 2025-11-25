@@ -68,9 +68,7 @@ router.get('/', async (req, res) => {
 ╔═════◇
 ║        『••• OWNER INFO •••』
 ║ ❒ 𝐘𝐨𝐮𝐭𝐮𝐛𝐞: _https://www.youtube.com/@blackTech-87_
-
 ║ ❒ 𝐎𝐰𝐧𝐞𝐫: _https://wa.me/256704291969_
-
 ║ ❒ 𝐖𝐚𝐂𝐡𝐚𝐧𝐧𝐞𝐥: _https://whatsapp.com/channel/0029VasAQRiGk1FtXGUz5T2V_
 > fork the following repo
 ║ ❒ Repo 2: _https://github.com/Orman87/ORMAM_XMD_
