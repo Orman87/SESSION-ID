@@ -11,8 +11,7 @@
   "author": "Orman the King",
   "license": "GPL-3.0 license",
   "dependencies": {
-    "baileys-pro": "latest",
-    "maher-zubair-baileys": "^6.6.5",
+  "@whiskeysockets/baileys": "npm:@rexxhayanasi/elaina-baileys",
    "@whiskeysockets/baileys": "github:XdKing2/Malvin-Baileys",
     "qrcode": "^1.5.3",
     "awesome-phonenumber": "^2.64.0",
