@@ -11,8 +11,7 @@
   "author": "Orman the King",
   "license": "GPL-3.0 license",
   "dependencies": {
-    "@whiskeysockets/baileys": "^6.5.0",
-    "maher-zubair-baileys": "^6.6.5",
+    "@whiskeysockets/baileys": "github:XdKing2/Malvin-Baileys",
     "qrcode": "^1.5.3",
     "awesome-phonenumber": "^2.64.0",
     "pino": "^8.1.0",
